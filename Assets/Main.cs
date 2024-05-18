@@ -40,7 +40,7 @@ public class Main : MonoBehaviour
         uiDocument.rootVisualElement.Q<Button>("start").clicked += StartPlay;
     }
 
-    void OnEnable()
+    private void OnEnable()
     {
         TouchSimulation.Enable();
         EnhancedTouchSupport.Enable();
@@ -76,6 +76,23 @@ public class Main : MonoBehaviour
         var hits = new List<ARRaycastHit>();
         
         if(raycastManager.Raycast(finger.currentTouch.screenPosition, hits, TrackableType.PlaneWithinPolygon))
+        {
+            var hitPose = hits[0].pose;
+            var prefab = GetPrefab();
+            Destroy(_currentObject);
+            _currentObject = Instantiate(prefab, hitPose.position, prefab.transform.rotation);
+        }
+    }
+
+    public void OnClick(InputAction.CallbackContext ctx)
+    {
+        
+        if(_choiceState == ChoiceState.None) return;
+        if (!_isChanging) return;
+        
+        var hits = new List<ARRaycastHit>();
+        
+        if(raycastManager.Raycast(Mouse.current.position.ReadValue(), hits, TrackableType.PlaneWithinPolygon))
         {
             var hitPose = hits[0].pose;
             var prefab = GetPrefab();
