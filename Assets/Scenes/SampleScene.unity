@@ -824,8 +824,8 @@ GameObject:
   - component: {fileID: 401623445}
   - component: {fileID: 401623444}
   - component: {fileID: 401623443}
-  - component: {fileID: 401623442}
   - component: {fileID: 401623441}
+  - component: {fileID: 401623446}
   m_Layer: 0
   m_Name: XR Origin (XR Rig)
   m_TagString: Untagged
@@ -846,21 +846,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_RaycastPrefab: {fileID: 0}
---- !u!114 &401623442
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 401623440}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e1760703bbd54c04488a8d10600262ab, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_PlanePrefab: {fileID: 5728681005469633886, guid: 12f211e6d12ad2047a51946e839042ce,
-    type: 3}
-  m_DetectionMode: 1
 --- !u!114 &401623443
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -907,6 +892,22 @@ Transform:
   - {fileID: 250108583}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &401623446
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 401623440}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4dea56a9eaadd1c439095de4f9a371cb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_SerializedLibrary: {fileID: 11400000, guid: 3ebdd6781be06364f8948c5597730fd3,
+    type: 2}
+  m_MaxNumberOfMovingImages: 0
+  m_TrackedImagePrefab: {fileID: 0}
 --- !u!1 &702413256
 GameObject:
   m_ObjectHideFlags: 0
@@ -1213,6 +1214,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   raycastManager: {fileID: 401623441}
+  trackedImageManager: {fileID: 401623446}
   uiDocument: {fileID: 1105189589}
   do_1: {fileID: 5840289042816548509, guid: 33afc56302eb780448217fa355186396, type: 3}
   do_2: {fileID: 6513769871744945225, guid: 14174ba9614bef64cae3bb1fe7810ebd, type: 3}
