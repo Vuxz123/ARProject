@@ -21,6 +21,8 @@ public class Main : MonoBehaviour
     
     public ARRaycastManager raycastManager;
     
+    public ARTrackedImageManager trackedImageManager;
+    
     public UIDocument uiDocument;
     
     public GameObject do_1;
@@ -40,11 +42,46 @@ public class Main : MonoBehaviour
         uiDocument.rootVisualElement.Q<Button>("start").clicked += StartPlay;
     }
 
+    private void Update()
+    {
+        if(trackedImageManager.trackables.count > 0)
+        {
+            foreach (var im in trackedImageManager.trackables)
+            {
+                if (_isChanging)
+                {
+                    var prefab = GetPrefab();
+        
+                    if(prefab == null) return;
+                    
+                    Debug.Log("Changing");
+                    Destroy(_currentObject);
+                    _currentObject = Instantiate(prefab, im.transform.position, prefab.transform.rotation);
+                    _isChanging = false;
+                }
+                break;
+            }
+        }
+    }
+    
+    void ListAllImages()
+    {
+        Debug.Log(
+            $"There are {trackedImageManager.trackables.count} images being tracked.");
+
+        foreach (var trackedImage in trackedImageManager.trackables)
+        {
+            Debug.Log($"Image: {trackedImage.referenceImage.name} is at " +
+                      $"{trackedImage.transform.position}");
+        }
+    }
+
     private void OnEnable()
     {
         TouchSimulation.Enable();
         EnhancedTouchSupport.Enable();
         Touch.onFingerDown += OnFingerDown;
+        //trackedImageManager.trackedImagesChanged += OnChange;
     }
 
     private void OnDisable()
@@ -52,6 +89,7 @@ public class Main : MonoBehaviour
         TouchSimulation.Disable();
         EnhancedTouchSupport.Disable();
         Touch.onFingerDown -= OnFingerDown;
+        //trackedImageManager.trackedImagesChanged -= OnChange;
     }
 
     private void StartPlay()
@@ -60,9 +98,32 @@ public class Main : MonoBehaviour
         _currentObject.SendMessage("StartThis");
     }
 
+    private void OnChange(ARTrackedImagesChangedEventArgs arTrackedImagesChangedEventArgs)
+    {
+        if(arTrackedImagesChangedEventArgs.updated.Count == 0) return;
+        var im = arTrackedImagesChangedEventArgs.updated[0];
+        
+        var prefab = GetPrefab();
+        
+        if(prefab == null) return;
+
+        if (_isChanging)
+        {
+            Debug.Log("Changing");
+            Destroy(_currentObject);
+            _currentObject = Instantiate(prefab, im.transform.position, prefab.transform.rotation);
+            _isChanging = false;
+        }
+        
+    }
+
     private void OnChoice(ChoiceState choiceState = ChoiceState.None)
     {
-        if (_choiceState != choiceState) _isChanging = true;
+        if (_choiceState != choiceState)
+        {
+            Debug.Log($"Changing to {choiceState}");
+            _isChanging = true;
+        }
         _choiceState = choiceState;
     }
 
@@ -108,7 +169,7 @@ public class Main : MonoBehaviour
             ChoiceState.Do1 => do_1,
             ChoiceState.Do2 => do_2,
             ChoiceState.Guilotine => guilotine,
-            _ => throw new ArgumentOutOfRangeException()
+            _ => null
         };
     }
 }
